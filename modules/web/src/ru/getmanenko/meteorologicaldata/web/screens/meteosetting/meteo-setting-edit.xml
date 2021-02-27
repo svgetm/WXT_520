@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="ru.getmanenko.meteorologicaldata.web.screens.meteosetting">
+    <data>
+        <instance id="meteoSettingDc"
+                  class="ru.getmanenko.meteorologicaldata.entity.MeteoSetting"
+                  view="_local">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="meteoSettingDc">
+            <column width="250px">
+                <textField id="timeToUpdateField" property="timeToUpdate"/>
+                <hbox id="spoiler" caption="mainMsg://spoiler" spacing="true" width="100%"/>
+                <textField id="selectComPortField" property="selectComPort"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

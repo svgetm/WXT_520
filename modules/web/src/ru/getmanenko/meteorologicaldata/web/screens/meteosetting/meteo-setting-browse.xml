@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="meteoSettingsTable"
+        messagesPack="ru.getmanenko.meteorologicaldata.web.screens.meteosetting">
+    <data readOnly="true">
+        <collection id="meteoSettingsDc"
+                    class="ru.getmanenko.meteorologicaldata.entity.MeteoSetting"
+                    view="_local">
+            <loader id="meteoSettingsDl">
+                <query>
+                    <![CDATA[select e from meteorologicaldata_MeteoSetting e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="scheduledTasksDc" class="com.haulmont.cuba.core.entity.ScheduledTask">
+            <view extends="_local"/>
+            <loader id="scheduledTasksDl">
+                <query>
+                    <![CDATA[select e from sys$ScheduledTask e order by e.methodName desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="" spacing="true">
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+        <vbox spacing="true">
+            <hbox spacing="true">
+                <groupTable id="meteoSettingsTable"
+                            width="400"
+                            dataContainer="meteoSettingsDc" height="200" columnControlVisible="false">
+
+                    <actions>
+                        <action id="edit" type="edit"/>
+                    </actions>
+                    <columns>
+                        <column id="timeToUpdate"/>
+                        <column id="selectComPort"/>
+                    </columns>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="editBtn" action="meteoSettingsTable.edit"/>
+                        <button id="Reset" icon="REFRESH_ACTION" stylename="danger"
+                                caption="msg://hardReset"/>
+                    </buttonsPanel>
+                </groupTable>
+                <vbox spacing="true">
+                    <table id="scheduledTasksTable" height="200px" width="400" dataContainer="scheduledTasksDc"
+                           columnControlVisible="false">
+                        <columns>
+                            <column id="description" caption="msg://tablTaskMethod"/>
+<!--                            <column id="methodName" caption="msg://tablTaskMethod"/>-->
+                            <column id="active" caption="msg://tablTaskActive"/>
+<!--                            <column id="period" caption="msg://tablTask"/>-->
+                            <column id="value" generator="setValueTask" caption="msg://tablTask"/>
+                        </columns>
+                        <buttonsPanel>
+                            <button invoke="activeTask" align="MIDDLE_CENTER" caption="msg://taskSwich"/>
+                        </buttonsPanel>
+                    </table>
+                </vbox>
+            </hbox>
+            <hbox spacing="true">
+                <vbox spacing="true" width="400px">
+                    <label value="msg://windSettings" stylename="colored" visible="true"/>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="periodRefreshWind" caption="msg://periodRefresh"/>
+                        <textField id="settingsWind" width="100" datatype="int" description="msg://Period" align="TOP_RIGHT">
+                            <validators>
+                                <min message="Минимальное значение 1" value="1"/>
+                                <max message="Максимальное значение 3600" value="3600"/>
+                            </validators>
+                        </textField>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="periodMidlWind" caption="msg://PeriodMidl"/>
+                        <textField id="settingsWindPerMidl" width="100px" description="msg://validMidlPer" datatype="int" align="TOP_RIGHT">
+                            <validators>
+                                <decimalMin value="1" message="Минимум 1"/>
+                                <decimalMax value="3600" inclusive="true" message="Максимум 3600"/>
+                            </validators>
+                        </textField>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="selectModeWind" caption="msg://modeWind"/>
+                        <hbox spacing="true" align="TOP_RIGHT">
+                            <popupView minimizedValue="info" hideOnMouseOut="false" align="TOP_RIGHT" icon="INFO_CIRCLE">
+                                <vbox>
+                                    <label id="infoModeOne" width="300px"/>
+                                    <label value="  "/>
+                                    <label id="infoModeTwo" width="300px"/>
+                                </vbox>
+                            </popupView>
+                            <lookupField id="modeWind" responsive="true" property="numberOfSeats" nullOptionVisible="false"
+                                         width="100" align="TOP_RIGHT"/>
+                        </hbox>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="selectUnitWind" caption="msg://utitSpeedButton"/>
+                        <lookupField id="unitSpeed" responsive="true" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="correctionDirection" caption="msg://correctionDirection"/>
+                        <textField id="settingsWindCorrect" width="100px" description="msg://correction" align="TOP_RIGHT"
+                                   datatype="int">
+                            <validators>
+                                <min value="-180" message="-180"/>
+                                <max message="180" value="180"/>
+                            </validators>
+                        </textField>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="formatParamsWind" caption="msg://formatForWind"/>
+                        <lookupField id="formatWind" responsive="true" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="samplingFrequency" caption="msg://SamplingFrequency"/>
+                        <lookupField id="samplingFrequency" responsive="true" property="numberOfSeats" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                </vbox>
+                <image height="350" width="3">
+                    <classpath path="ru/getmanenko/meteorologicaldata/image/line.png"/>
+                </image>
+                <vbox spacing="true" width="350px">
+                    <label value="msg://rainSettings" stylename="colored" visible="true"/>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="periodRefreshTemp" caption="msg://periodRefresh"/>
+                        <textField id="settingsTempPerRef" width="100" datatype="int" description="msg://Period" align="TOP_RIGHT">
+                            <validators>
+                                <max message="Максимальное значение" value="3600"/>
+                            </validators>
+                        </textField>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="selectUtitPa" caption="msg://Pa"/>
+                        <lookupField responsive="true" nullOptionVisible="false"
+                                     width="100" id="Pa" align="TOP_RIGHT"/>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="selectUtitTemp" caption="msg://UnitTemp"/>
+                        <lookupField id="unitT" responsive="true" property="numberOfSeats" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                </vbox>
+                <image height="350" width="3">
+                    <classpath path="ru/getmanenko/meteorologicaldata/image/line.png"/>
+                </image>
+                <vbox spacing="true" width="350">
+                    <label value="msg://wetSettings" stylename="colored" visible="true"/>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="periodRefreshWet" caption="msg://periodRefresh"/>
+                        <textField id="settingsWetPerRef" width="100" datatype="int" description="msg://Period" align="TOP_RIGHT">
+                            <validators>
+                                <max message="Максимальное значение" value="3600"/>
+                            </validators>
+                        </textField>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="selectUnitWet" caption="msg://utitWetButton"/>
+                        <lookupField id="unitWet" responsive="true" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="selectUnitKick" caption="msg://unitKick"/>
+                        <lookupField id="unitKick" responsive="true" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="selectModeSend" caption="msg://modeSend"/>
+                        <lookupField id="modeSend" responsive="true" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="resetCount" caption="msg://resetCount"/>
+                        <lookupField id="resetCount" responsive="true" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="predelRain" caption="msg://predelRain"/>
+                        <textField id="settingsWetPredelRain" width="100" datatype="int" description="msg://Periodrain" align="TOP_RIGHT">
+                            <validators>
+                                <max message="Максимальное значение" value="3600"/>
+                            </validators>
+                        </textField>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="predelWet" caption="msg://predelWet"/>
+                        <textField id="settingsWetPredelWet" width="100" datatype="int" description="msg://Periodrain" align="TOP_RIGHT">
+                            <validators>
+                                <max message="Максимальное значение" value="3600"/>
+                            </validators>
+                        </textField>
+                    </hbox>
+                </vbox>
+                <image height="350" width="3">
+                    <classpath path="ru/getmanenko/meteorologicaldata/image/line.png"/>
+                </image>
+                <vbox spacing="true" width="350">
+                    <label value="msg://superVision" stylename="colored" visible="true"/>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="periodRefreshVizor" caption="msg://periodRefresh"/>
+                        <textField id="settingsVizorPerRef" width="100" datatype="int" description="msg://Period" align="TOP_RIGHT">
+                            <validators>
+                                <max message="Максимальное значение" value="3600"/>
+                            </validators>
+                        </textField>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="enableMessageError" caption="msg://messError"/>
+                        <lookupField id="messError" responsive="true" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                    <hbox spacing="true" width="100%">
+                        <button invoke="hitControl" caption="msg://controlHit"/>
+                        <lookupField id="controlHit" responsive="true" nullOptionVisible="false"
+                                     width="100" align="TOP_RIGHT"/>
+                    </hbox>
+                </vbox>
+            </hbox>
+            <hbox spacing="true">
+                <vbox spacing="true" width="400">
+                    <textArea id="infoStation" width="100%" editable="false"/>
+                    <button invoke="getInfoStation" caption="mainMsg://infoStation" align="MIDDLE_CENTER"/>
+                </vbox>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

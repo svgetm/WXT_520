@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
+               dependsOn="com.haulmont.addon.globalevents, com.haulmont.charts, com.haulmont.cuba, com.haulmont.addon.helium">
+
+    <module name="global" blocks="*">
+        <artifact name="meteostation-global" appJar="true"/>
+
+        <property name="cuba.persistenceConfig" value="+ru/getmanenko/meteorologicaldata/persistence.xml"/>
+        <property name="cuba.metadataConfig" value="+ru/getmanenko/meteorologicaldata/metadata.xml"/>
+        <property name="cuba.viewsConfig" value="+ru/getmanenko/meteorologicaldata/views.xml"/>
+    </module>
+    <module name="core" dependsOn="global" blocks="core">
+        <artifact name="meteostation-core" appJar="true"/>
+        <artifact name="meteostation-core" classifier="db" ext="zip" configuration="dbscripts"/>
+
+        <property name="cuba.springContextConfig" value="+ru/getmanenko/meteorologicaldata/spring.xml"/>
+        <property name="cuba.mainMessagePack" value="+ru.getmanenko.meteorologicaldata.core"/>
+    </module>
+    <module name="web" dependsOn="global" blocks="web">
+        <artifact name="meteostation-web" appJar="true"/>
+        <artifact name="meteostation-web" classifier="web" ext="zip" configuration="webcontent"/>
+        <artifact name="meteostation-web" ext="jar" configuration="themes" classifier="themes"/>
+
+        <property name="cuba.springContextConfig" value="+ru/getmanenko/meteorologicaldata/web-spring.xml"/>
+        <property name="cuba.dispatcherSpringContextConfig"
+                  value="+ru/getmanenko/meteorologicaldata/web-dispatcher-spring.xml"/>
+        <property name="cuba.windowConfig" value="+ru/getmanenko/meteorologicaldata/web-screens.xml"/>
+        <property name="cuba.menuConfig" value="+ru/getmanenko/meteorologicaldata/web-menu.xml"/>
+        <property name="cuba.permissionConfig" value="+ru/getmanenko/meteorologicaldata/web-permissions.xml"/>
+        <property name="cuba.mainMessagePack" value="+ru.getmanenko.meteorologicaldata.web"/>
+    </module>
+</app-component>

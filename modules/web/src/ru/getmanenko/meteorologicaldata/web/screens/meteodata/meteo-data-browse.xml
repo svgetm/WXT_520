@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="meteoDatasTable"
+        messagesPack="ru.getmanenko.meteorologicaldata.web.screens.meteodata">
+    <data readOnly="true">
+        <collection id="meteoDatasDc"
+                    class="ru.getmanenko.meteorologicaldata.entity.MeteoData"
+                    view="_local">
+            <loader id="meteoDatasDl">
+                <query>
+                    <![CDATA[select e from meteorologicaldata_MeteoData e order by e.timeResult desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="meteoDatasTable"
+            spacing="true">
+        <filter id="filterMeteo"
+                applyTo="meteoDatasTable"
+                dataLoader="meteoDatasDl"
+                textMaxResults="true"
+                useMaxResults="true" visible="false">
+            <properties include=".*"/>
+        </filter>
+        <hbox spacing="true">
+            <buttonsPanel>
+                <button invoke="setDay" caption="mainMsg://weekDay"/>
+                <button invoke="setWeek" caption="mainMsg://weekPeriod"/>
+                <button invoke="setMonth" caption="mainMsg://monthPeriod"/>
+                <button invoke="setYear" caption="mainMsg://yearPeriod"/>
+                <button invoke="setAllTime" caption="mainMsg://allTimePeriod"/>
+                <dateField id="from" caption="От" resolution="MIN"
+                           rangeStart="2020-01-01"/>
+                <dateField id="todo" caption="До" resolution="MIN"
+                           rangeStart="2020-01-01"/>
+                <button invoke="resetDateField" icon="PICKERFIELD_CLEAR"/>
+                <button invoke="setPeriod" caption="mainMsg://lookperiod"/>
+            </buttonsPanel>
+        </hbox>
+        <groupTable id="meteoDatasTable"
+                    width="100%"
+                    dataContainer="meteoDatasDc" sortable="false">
+            <columns>
+                <column id="timeResult"/>
+                <column id="dx" description="msg://localDx"/>
+                <column id="dn" description="msg://localDn"/>
+                <column id="dm" description="msg://localDm"/>
+                <column id="sx" description="msg://localSx"/>
+                <column id="sn" description="msg://localSn"/>
+                <column id="sm" description="msg://localSm"/>
+                <column id="rd" description="msg://localRd"/>
+                <column id="ri" description="msg://localRi"/>
+                <column id="rc" description="msg://localRc"/>
+                <column id="rp" description="msg://localRp"/>
+                <column id="hc" description="msg://localHc"/>
+                <column id="hd" description="msg://localHd"/>
+                <column id="hi" description="msg://localHi"/>
+                <column id="hp" description="msg://localHp"/>
+                <column id="ta" description="msg://localTa"/>
+                <column id="tp" description="msg://localTp"/>
+                <column id="ua" description="msg://localUa"/>
+                <column id="pa" description="msg://localPa"/>
+                <column id="th" description="msg://localTh"/>
+                <column id="vh" description="msg://localVh"/>
+                <column id="vr" description="msg://localVr"/>
+                <column id="vs" description="msg://localVs"/>
+            </columns>
+            <rowsCount/>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

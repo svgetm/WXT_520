@@ -1,0 +1,14 @@
+@import "hover-defaults";
+@import "ru.getmanenko.meteorologicaldata/hover-ext-defaults";
+@import "app-components";
+@import "ru.getmanenko.meteorologicaldata/hover-ext";
+@import "../hover/branding/hideCredit";
+
+
+.hover {
+  // include auto-generated app components SCSS
+  @include app_components;
+
+  @include ru_getmanenko_meteorologicaldata-hover-ext;
+  @include hideCredit;
+}

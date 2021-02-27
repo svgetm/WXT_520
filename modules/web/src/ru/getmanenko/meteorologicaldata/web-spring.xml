@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:gui="http://schemas.haulmont.com/cuba/spring/cuba-gui.xsd">
+
+    <!-- Annotation-based beans -->
+    <context:component-scan base-package="ru.getmanenko.meteorologicaldata"/>
+    
+    <gui:screens base-packages="ru.getmanenko.meteorologicaldata.web"/>
+    <bean id="meteorologicaldata_proxyCreator" class="com.haulmont.cuba.web.sys.remoting.WebRemoteProxyBeanCreator">
+        <property name="serverSelector" ref="cuba_ServerSelector"/>
+        <property name="remoteServices">
+            <map>
+                <entry key="meteorologicaldata_ConnectService"
+                       value="ru.getmanenko.meteorologicaldata.service.ConnectService"/>
+                <entry key="meteorologicaldata_MeteoSettingsService"
+                       value="ru.getmanenko.meteorologicaldata.service.MeteoSettingsService"/>
+                <entry key="meteorologicaldata_CreateMapService"
+                       value="ru.getmanenko.meteorologicaldata.service.CreateMapService"/>
+                <entry key="meteorologicaldata_EntityService"
+                       value="ru.getmanenko.meteorologicaldata.service.EntityService"/>
+            </map>
+        </property>
+    </bean>
+
+</beans>

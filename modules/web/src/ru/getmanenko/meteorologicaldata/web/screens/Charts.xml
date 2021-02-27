@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://caption"
+        messagesPack="ru.getmanenko.meteorologicaldata.web.screens"
+        xmlns:chart="http://schemas.haulmont.com/charts/charts.xsd">
+    <data>
+        <collection id="meteoDatasDc" class="ru.getmanenko.meteorologicaldata.entity.MeteoData">
+            <view extends="_local"/>
+            <loader id="meteoDatasDl">
+                <query>
+                    <![CDATA[select e from meteorologicaldata_MeteoData e where @between(e.timeResult, now-1440, now, minute) order by e.timeResult asc ]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <layout expand="all">
+        <hbox spacing="true">
+            <buttonsPanel>
+                <button invoke="setDay" caption="mainMsg://weekDay"/>
+                <button invoke="setWeek" caption="mainMsg://weekPeriod"/>
+                <button invoke="setMonth" caption="mainMsg://monthPeriod"/>
+                <dateField id="from" caption="От" resolution="MIN"
+                           rangeStart="2020-01-01"/>
+                <dateField id="todo" caption="До" resolution="MIN"
+                           rangeStart="2020-01-01"/>
+                <button invoke="resetDateField" icon="PICKERFIELD_CLEAR"/>
+                <button invoke="setPeriod" caption="mainMsg://lookperiod"/>
+            </buttonsPanel>
+        </hbox>
+        <groupBox id="all" spacing="true">
+            <hbox spacing="true" height="100%" width="100%" stylename="hideCredit" margin="false,false,true,false">
+                <accordion height="100%">
+                    <tab expand="vboxTepm" id="tab" caption="График температуры"
+                         icon="branding/icon/thermometer-outlined-symbol-of-stroke_icon-icons.com_54637.png">
+                        <vbox id="vboxTepm" spacing="true" expand="chartTemp">
+                            <label id="labelTemp" value="Период: весь период" htmlEnabled="true" height="20"/>
+                            <chart:serialChart id="chartTemp"
+                                                   precision="1"
+                                                   autoMarginOffset="20"
+                                                   categoryField="timeResult"
+                                                   dataContainer="meteoDatasDc"
+                                                   height="100%"
+                                                   marginRight="40"
+                                                   marginLeft="40"
+                                                   mouseWheelZoomEnabled="true"
+                                                   width="100%"
+                                                   dataDateFormat="YYYY-MM-DD HH:NN:SS">
+                                <chart:legend equalWidths="false"
+                                              valueAlign="LEFT"
+                                              position="BOTTOM"
+                                              periodValueText="mainMsg://temp"
+                                              valueWidth="100"/>
+                                <chart:categoryAxis parseDates="true" equalSpacing="true" minPeriod="MINUTES"/>
+                                <chart:titles>
+                                    <chart:title text="mainMsg://tempTitle"/>
+                                </chart:titles>
+                                <chart:valueAxes>
+                                    <chart:axis id="v1"
+                                                precision="1"
+                                                axisAlpha="0"
+                                                ignoreAxisWidth="true"
+                                                position="LEFT"
+                                                title="°C"/>
+                                </chart:valueAxes>
+                                <chart:balloon borderThickness="1"
+                                               shadowAlpha="0"/>
+                                <chart:graphs>
+                                    <chart:graph id="g1"
+                                                 bullet="ROUND"
+                                                 bulletBorderAlpha="1"
+                                                 bulletColor="WHITE"
+                                                 bulletSize="5"
+                                                 hideBulletsCount="50"
+                                                 lineThickness="2"
+                                                 title="mainMsg://tempTitle"
+                                                 useLineColorForBulletBorder="true"
+                                                 valueField="ta"
+                                                 balloonText="&lt;span style='font-size:18px;'&gt;[[ta]]&lt;/span&gt;">
+                                        <chart:balloon adjustBorderColor="false"
+                                                       color="WHITE"
+                                                       drop="true"/>
+                                    </chart:graph>
+                                </chart:graphs>
+                                <chart:categoryAxis dashLength="1"
+                                                    minorGridEnabled="true"/>
+                                <chart:chartScrollbar autoGridCount="true"
+                                                      backgroundAlpha="0"
+                                                      color="#AAAAAA"
+                                                      graph="g1"
+                                                      graphFillAlpha="0"
+                                                      graphLineAlpha="0.5"
+                                                      offset="30"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="30"
+                                                      selectedBackgroundAlpha="0.1"
+                                                      selectedBackgroundColor="#888888"
+                                                      selectedGraphFillAlpha="0"
+                                                      selectedGraphLineAlpha="1"/>
+                                <chart:chartCursor cursorAlpha="1"
+                                                   cursorColor="#258cbb"
+                                                   cursorPosition="MOUSE"
+                                                   limitToGraph="g1"
+                                                   pan="false"
+                                                   valueLineAlpha="0.2"
+                                                   valueLineEnabled="true"
+                                                   valueLineBalloonEnabled="true"
+                                                   valueZoomable="true"/>
+                                <chart:valueScrollbar offset="50"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="10"/>
+                                <chart:export/>
+                            </chart:serialChart>
+                        </vbox>
+                    </tab>
+                    <tab expand="vboxSpeed" id="tab_1" caption="График скорости ветра"
+                         icon="branding/icon/wind-weather-lines-group-symbol_icon-icons.com_54629.png">
+                        <vbox expand="chartSpeed" id="vboxSpeed" spacing="true">
+                            <label id="labelSpeed" value="Период: весь период" htmlEnabled="true" height="20"/>
+                            <chart:serialChart id="chartSpeed"
+                                                   precision="2"
+                                                   autoMarginOffset="20"
+                                                   categoryField="timeResult"
+                                                   dataContainer="meteoDatasDc"
+                                                   height="100%"
+                                                   marginRight="40"
+                                                   marginLeft="40"
+                                                   mouseWheelZoomEnabled="true"
+                                                   width="100%"
+                                                   dataDateFormat="YYYY-MM-DD HH:NN:SS">
+                                <chart:categoryAxis parseDates="true" equalSpacing="true" minPeriod="MINUTES"/>
+                                <chart:legend equalWidths="false"
+                                              valueAlign="LEFT"
+                                              position="BOTTOM"
+                                              valueWidth="100"/>
+                                <chart:titles>
+                                    <chart:title text="mainMsg://windTitle"/>
+                                </chart:titles>
+                                <chart:valueAxes>
+                                    <chart:axis id="v2"
+                                                axisAlpha="0"
+                                                ignoreAxisWidth="true"
+                                                position="LEFT"
+                                                title="м/с"/>
+                                </chart:valueAxes>
+                                <chart:balloon borderThickness="1"
+                                               shadowAlpha="0"/>
+                                <chart:graphs>
+                                    <chart:graph id="sx"
+                                                 legendPeriodValueText="[[value.high]]"
+                                                 bullet="ROUND"
+                                                 bulletBorderAlpha="1"
+                                                 bulletColor="WHITE"
+                                                 bulletSize="5"
+                                                 hideBulletsCount="50"
+                                                 lineThickness="2"
+                                                 title="mainMsg://windMax"
+                                                 useLineColorForBulletBorder="true"
+                                                 valueField="sx"
+                                                 balloonText="&lt;span style='font-size:18px;'&gt;[[sx]]&lt;/span&gt;">
+                                        <chart:balloon adjustBorderColor="false"
+                                                       color="WHITE"
+                                                       drop="true"/>
+                                    </chart:graph>
+                                    <chart:graph id="sn"
+                                                 legendPeriodValueText="[[value.low]]"
+                                                 bullet="ROUND"
+                                                 bulletBorderAlpha="1"
+                                                 bulletColor="WHITE"
+                                                 bulletSize="5"
+                                                 hideBulletsCount="50"
+                                                 lineThickness="2"
+                                                 title="mainMsg://windMin"
+                                                 useLineColorForBulletBorder="true"
+                                                 valueField="sn"
+                                                 balloonText="&lt;span style='font-size:18px;'&gt;[[sn]]&lt;/span&gt;">
+                                        <chart:balloon adjustBorderColor="false"
+                                                       color="WHITE"
+                                                       drop="true"/>
+                                    </chart:graph>
+                                    <chart:graph id="sm"
+                                                 legendPeriodValueText="[[value.average]]"
+                                                 bullet="ROUND"
+                                                 bulletBorderAlpha="1"
+                                                 bulletColor="WHITE"
+                                                 bulletSize="5"
+                                                 hideBulletsCount="50"
+                                                 lineThickness="2"
+                                                 title="mainMsg://windAvg"
+                                                 useLineColorForBulletBorder="true"
+                                                 valueField="sm"
+                                                 balloonText="&lt;span style='font-size:18px;'&gt;[[sm]]&lt;/span&gt;">
+                                        <chart:balloon adjustBorderColor="false"
+                                                       color="WHITE"
+                                                       drop="true"/>
+                                    </chart:graph>
+                                </chart:graphs>
+                                <chart:categoryAxis dashLength="1"
+                                                    minorGridEnabled="true"/>
+                                <chart:chartScrollbar autoGridCount="true"
+                                                      backgroundAlpha="0"
+                                                      color="#AAAAAA"
+                                                      graph="sm"
+                                                      graphFillAlpha="0"
+                                                      graphLineAlpha="0.5"
+                                                      offset="30"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="30"
+                                                      selectedBackgroundAlpha="0.1"
+                                                      selectedBackgroundColor="#888888"
+                                                      selectedGraphFillAlpha="0"
+                                                      selectedGraphLineAlpha="1"/>
+                                <chart:chartCursor cursorAlpha="1"
+                                                   cursorColor="#258cbb"
+                                                   cursorPosition="MOUSE"
+                                                   limitToGraph="g1"
+                                                   pan="false"
+                                                   valueLineAlpha="0.2"
+                                                   valueLineEnabled="true"
+                                                   valueLineBalloonEnabled="true"
+                                                   valueZoomable="true"/>
+                                <chart:valueScrollbar offset="50"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="10"/>
+                                <chart:export/>
+                            </chart:serialChart>
+                        </vbox>
+                    </tab>
+                    <tab expand="vboxHeat" id="tab_3" caption="График влажности" margin="true,false,false,false" spacing="true"
+                         icon="branding/icon/raindrops-outlines-weather-symbol-of-water-drops_icon-icons.com_54656.png">
+                        <vbox expand="chartHeat" id="vboxHeat" spacing="true">
+                            <label id="labelHeat" value="Период: весь период" htmlEnabled="true" height="20"/>
+                            <chart:serialChart id="chartHeat"
+                                                   precision="1"
+                                                   autoMarginOffset="20"
+                                                   categoryField="timeResult"
+                                                   dataContainer="meteoDatasDc"
+                                                   height="100%"
+                                                   marginRight="40"
+                                                   marginLeft="40"
+                                                   mouseWheelZoomEnabled="true"
+                                                   width="100%"
+                                                   dataDateFormat="YYYY-MM-DD HH:NN:SS">
+                                <chart:legend equalWidths="false"
+                                              valueAlign="LEFT"
+                                              position="BOTTOM"
+                                              periodValueText="mainMsg://uaCharts"
+                                              valueWidth="100"/>
+                                <chart:categoryAxis parseDates="true" equalSpacing="true" minPeriod="MINUTES"/>
+                                <chart:titles>
+                                    <chart:title text="mainMsg://wetTitle"/>
+                                </chart:titles>
+                                <chart:valueAxes>
+                                    <chart:axis id="v3"
+                                                axisAlpha="0"
+                                                ignoreAxisWidth="true"
+                                                position="LEFT"
+                                                title="%"/>
+                                </chart:valueAxes>
+                                <chart:balloon borderThickness="1"
+                                               shadowAlpha="0"/>
+                                <chart:graphs>
+                                    <chart:graph id="gUa"
+                                                 bullet="ROUND"
+                                                 bulletBorderAlpha="1"
+                                                 bulletColor="WHITE"
+                                                 bulletSize="5"
+                                                 hideBulletsCount="50"
+                                                 lineThickness="2"
+                                                 title="mainMsg://wetTitle"
+                                                 useLineColorForBulletBorder="true"
+                                                 valueField="ua"
+                                                 balloonText="&lt;span style='font-size:18px;'&gt;[[ua]]&lt;/span&gt;">
+                                        <chart:balloon adjustBorderColor="false"
+                                                       color="WHITE"
+                                                       drop="true"/>
+                                    </chart:graph>
+                                </chart:graphs>
+                                <chart:categoryAxis dashLength="1"
+                                                    minorGridEnabled="true"/>
+                                <chart:chartScrollbar autoGridCount="true"
+                                                      backgroundAlpha="0"
+                                                      color="#AAAAAA"
+                                                      graph="gUa"
+                                                      graphFillAlpha="0"
+                                                      graphLineAlpha="0.5"
+                                                      offset="30"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="30"
+                                                      selectedBackgroundAlpha="0.1"
+                                                      selectedBackgroundColor="#888888"
+                                                      selectedGraphFillAlpha="0"
+                                                      selectedGraphLineAlpha="1"/>
+                                <chart:chartCursor cursorAlpha="1"
+                                                   cursorColor="#258cbb"
+                                                   cursorPosition="MOUSE"
+                                                   limitToGraph="g1"
+                                                   pan="false"
+                                                   valueLineAlpha="0.2"
+                                                   valueLineEnabled="true"
+                                                   valueLineBalloonEnabled="true"
+                                                   valueZoomable="true"/>
+                                <chart:valueScrollbar offset="50"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="10"/>
+                                <chart:export/>
+                            </chart:serialChart>
+                        </vbox>
+                    </tab>
+                    <tab expand="vboxPress" id="tab_4" caption="График давления" margin="true,false,false,false" spacing="true"
+                         icon="branding/icon/barometer-semicircular-outlined-tool-symbol_icon-icons.com_54699.png">
+                        <vbox expand="chartPress" id="vboxPress" spacing="true">
+                            <label id="labelPress" value="Период: весь период" htmlEnabled="true" height="20"/>
+                            <chart:serialChart id="chartPress"
+                                                   precision="1"
+                                                   autoMarginOffset="20"
+                                                   categoryField="timeResult"
+                                                   dataContainer="meteoDatasDc"
+                                                   height="100%"
+                                                   marginRight="40"
+                                                   marginLeft="40"
+                                                   mouseWheelZoomEnabled="true"
+                                                   width="100%"
+                                                   dataDateFormat="YYYY-MM-DD HH:NN:SS">
+                                <chart:legend equalWidths="false"
+                                              valueAlign="LEFT"
+                                              position="BOTTOM"
+                                              periodValueText="mainMsg://pressChart"
+                                              valueWidth="100"/>
+                                <chart:categoryAxis parseDates="true" equalSpacing="true" minPeriod="MINUTES"/>
+                                <chart:titles>
+                                    <chart:title text="mainMsg://pressTitle"/>
+                                </chart:titles>
+                                <chart:valueAxes>
+                                    <chart:axis id="v5"
+                                                axisAlpha="0"
+                                                ignoreAxisWidth="true"
+                                                position="LEFT"
+                                                precision="1"
+                                                title="мм рт. ст."/>
+                                </chart:valueAxes>
+                                <chart:balloon borderThickness="1"
+                                               shadowAlpha="0"/>
+                                <chart:graphs>
+                                    <chart:graph id="g5"
+                                                 bullet="ROUND"
+                                                 bulletBorderAlpha="1"
+                                                 bulletColor="WHITE"
+                                                 bulletSize="5"
+                                                 hideBulletsCount="50"
+                                                 lineThickness="2"
+                                                 title="mainMsg://pressTitle"
+                                                 useLineColorForBulletBorder="true"
+                                                 valueField="pa"
+                                                 balloonText="&lt;span style='font-size:18px;'&gt;[[pa]]&lt;/span&gt;">
+                                        <chart:balloon adjustBorderColor="false"
+                                                       color="WHITE"
+                                                       drop="true"/>
+                                    </chart:graph>
+                                </chart:graphs>
+                                <chart:categoryAxis dashLength="1"
+                                                    minorGridEnabled="true"/>
+                                <chart:chartScrollbar autoGridCount="true"
+                                                      backgroundAlpha="0"
+                                                      color="#AAAAAA"
+                                                      graph="g5"
+                                                      graphFillAlpha="0"
+                                                      graphLineAlpha="0.5"
+                                                      offset="30"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="30"
+                                                      selectedBackgroundAlpha="0.1"
+                                                      selectedBackgroundColor="#888888"
+                                                      selectedGraphFillAlpha="0"
+                                                      selectedGraphLineAlpha="1"/>
+                                <chart:chartCursor cursorAlpha="1"
+                                                   cursorColor="#258cbb"
+                                                   cursorPosition="MOUSE"
+                                                   limitToGraph="g1"
+                                                   pan="false"
+                                                   valueLineAlpha="0.2"
+                                                   valueLineEnabled="true"
+                                                   valueLineBalloonEnabled="true"
+                                                   valueZoomable="true"/>
+                                <chart:valueScrollbar offset="50"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="10"/>
+                                <chart:export/>
+                            </chart:serialChart>
+                        </vbox>
+                    </tab>
+                    <tab expand="vboxRain" id="tab_5" caption="График осадков" margin="true,false,false,false" spacing="true"
+                         icon="branding/icon/rain-cloud-stroke-weather-symbol_icon-icons.com_54659.png">
+                        <vbox expand="chartRain" id="vboxRain" spacing="true">
+                            <label id="labelRain" value="Период: весь период" htmlEnabled="true" height="20"/>
+                            <chart:serialChart id="chartRain"
+                                                   precision="2"
+                                                   autoMarginOffset="20"
+                                                   categoryField="timeResult"
+                                                   dataContainer="meteoDatasDc"
+                                                   height="100%"
+                                                   marginRight="40"
+                                                   marginLeft="40"
+                                                   mouseWheelZoomEnabled="true"
+                                                   width="100%"
+                                                   dataDateFormat="YYYY-MM-DD HH:NN:SS">
+                                <chart:legend equalWidths="false"
+                                              valueAlign="LEFT"
+                                              position="BOTTOM"
+                                              periodValueText="mainMsg://wetChart"
+                                              valueWidth="100"/>
+                                <chart:categoryAxis parseDates="true" equalSpacing="true" minPeriod="MINUTES"/>
+                                <chart:titles>
+                                    <chart:title text="mainMsg://rainfallTitle"/>
+                                </chart:titles>
+                                <chart:valueAxes>
+                                    <chart:axis id="v4"
+                                                axisAlpha="0"
+                                                ignoreAxisWidth="true"
+                                                position="LEFT"
+                                                title="мм"/>
+                                </chart:valueAxes>
+                                <chart:balloon borderThickness="1"
+                                               shadowAlpha="0"/>
+                                <chart:graphs>
+                                    <chart:graph id="g4"
+                                                 bullet="ROUND"
+                                                 bulletBorderAlpha="1"
+                                                 bulletColor="WHITE"
+                                                 bulletSize="5"
+                                                 hideBulletsCount="50"
+                                                 lineThickness="2"
+                                                 title="mainMsg://rainfallTitle"
+                                                 useLineColorForBulletBorder="true"
+                                                 valueField="rc"
+                                                 balloonText="&lt;span style='font-size:18px;'&gt;[[rc]]&lt;/span&gt;">
+                                        <chart:balloon adjustBorderColor="false"
+                                                       color="WHITE"
+                                                       drop="true"/>
+                                    </chart:graph>
+                                </chart:graphs>
+                                <chart:categoryAxis dashLength="1"
+                                                    minorGridEnabled="true"/>
+                                <chart:chartScrollbar autoGridCount="true"
+                                                      backgroundAlpha="0"
+                                                      color="#AAAAAA"
+                                                      graph="g4"
+                                                      graphFillAlpha="0"
+                                                      graphLineAlpha="0.5"
+                                                      offset="30"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="30"
+                                                      selectedBackgroundAlpha="0.1"
+                                                      selectedBackgroundColor="#888888"
+                                                      selectedGraphFillAlpha="0"
+                                                      selectedGraphLineAlpha="1"/>
+                                <chart:chartCursor cursorAlpha="1"
+                                                   cursorColor="#258cbb"
+                                                   cursorPosition="MOUSE"
+                                                   limitToGraph="g1"
+                                                   pan="false"
+                                                   valueLineAlpha="0.2"
+                                                   valueLineEnabled="true"
+                                                   valueLineBalloonEnabled="true"
+                                                   valueZoomable="true"/>
+                                <chart:valueScrollbar offset="50"
+                                                      oppositeAxis="false"
+                                                      scrollbarHeight="10"/>
+                                <chart:export/>
+                            </chart:serialChart>
+                        </vbox>
+                    </tab>
+                </accordion>
+            </hbox>
+        </groupBox>
+    </layout>
+</window>

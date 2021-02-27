@@ -1,0 +1,5 @@
+@import "hover-ext";
+
+@mixin ru_getmanenko_meteorologicaldata {
+  @include ru_getmanenko_meteorologicaldata-hover-ext;
+}

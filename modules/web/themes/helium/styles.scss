@@ -1,0 +1,13 @@
+@import "helium-defaults";
+@import "ru.getmanenko.meteorologicaldata/helium-ext-defaults";
+@import "app-components";
+@import "ru.getmanenko.meteorologicaldata/helium-ext";
+@import "../helium/branding/hideCredit";
+
+.helium {
+  // include auto-generated app components SCSS
+  @include app_components;
+
+  @include ru_getmanenko_meteorologicaldata-helium-ext;
+  @include hideCredit;
+}

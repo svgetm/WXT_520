@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd">
+    <data>
+        <collection id="meteoDataOnlinesDc" class="ru.getmanenko.meteorologicaldata.entity.MeteoDataOnline" view="_local">
+            <loader id="meteoDataOnlinesDl">
+                <query>
+                    <![CDATA[select e from meteorologicaldata_MeteoDataOnline e ]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <layout>
+<!--        Вариант для виджета надпись + ссылка        -->
+<!--        <popupView id="data" minimizedValue="msg://lookup" hideOnMouseOut="false"-->
+<!--                   captionAsHtml="true" icon="CLOUD">-->
+<!--            <vbox width="AUTO" height="AUTO">-->
+<!--                <label id="tempOut" stylename="colored"/>-->
+<!--                <label id="rain" stylename="colored"/>-->
+<!--                <label id="wind" stylename="colored"/>-->
+<!--                <label id="press" stylename="colored"/>-->
+<!--                <label id="wet" stylename="colored"/>-->
+<!--            </vbox>-->
+<!--        </popupView>-->
+        <popupButton id="data" description="Метео данные" icon="CLOUD" closePopupOnOutsideClick="true" width="100%"
+                     caption="msg://popupCap" stylename="borderless c-sidemenu-title">
+            <popup>
+                <vbox width="230px" height="AUTO" margin="true">
+                    <groupBox spacing="true" height="100%" >
+                        <label id="tempOut" stylename="colored"/>
+                    </groupBox>
+                    <groupBox spacing="true" height="100%" >
+                        <label id="rain" stylename="colored"/>
+                    </groupBox>
+                    <groupBox spacing="true" height="100%" >
+                        <label id="wind" stylename="colored"/>
+                    </groupBox>
+                    <groupBox spacing="true" height="100%" >
+                        <label id="press" stylename="colored"/>
+                    </groupBox>
+                    <groupBox spacing="true" height="100%" >
+                        <label id="wet" stylename="colored"/>
+                    </groupBox>
+
+                </vbox>
+            </popup>
+        </popupButton>
+    </layout>
+</fragment>
