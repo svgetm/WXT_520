@@ -76,6 +76,6 @@
  #### Координаты модуля
  <a name="coord"></a>
  
- Координаты модуля: `ru.getmanenko.meteorologicaldata:meteostation-global:0.7-SNAPSHOT`
+ Координаты модуля: `ru.getmanenko.meteorologicaldata:meteostation-global:4.4-SNAPSHOT`
  
  <small>[в начало](#zeroDot)</small>
